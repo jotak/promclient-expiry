@@ -1283,6 +1283,7 @@ func TestNewConstHistogramWithCreatedTimestamp(t *testing.T) {
 		"sample value",
 		nil,
 		nil,
+		nil,
 	)
 	buckets := map[float64]uint64{25: 100, 50: 200}
 	createdTs := time.Unix(1719670764, 123)

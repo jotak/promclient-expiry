@@ -19,7 +19,7 @@ func TestCollectorFunc(t *testing.T) {
 	testDesc := NewDesc(
 		"test_metric",
 		"A test metric",
-		nil, nil,
+		nil, nil, nil,
 	)
 
 	cf := CollectorFunc(func(ch chan<- Metric) {
@@ -61,7 +61,7 @@ func TestCollectorFuncWithRegistry(t *testing.T) {
 			NewDesc(
 				"test_metric",
 				"A test metric",
-				nil, nil,
+				nil, nil, nil,
 			),
 			GaugeValue,
 			42.0,

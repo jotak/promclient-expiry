@@ -385,6 +385,7 @@ func ExampleNewConstSummary() {
 		"A summary of the HTTP request durations.",
 		[]string{"code", "method"},
 		prometheus.Labels{"owner": "example"},
+		nil,
 	)
 
 	// Create a constant summary from values we got from a 3rd party telemetry system.
@@ -412,6 +413,7 @@ func ExampleNewConstSummaryWithCreatedTimestamp() {
 		"A summary of the HTTP request durations.",
 		[]string{"code", "method"},
 		prometheus.Labels{"owner": "example"},
+		nil,
 	)
 
 	// Create a constant summary with created timestamp set
@@ -465,6 +467,7 @@ func ExampleNewConstHistogram() {
 		"A histogram of the HTTP request durations.",
 		[]string{"code", "method"},
 		prometheus.Labels{"owner": "example"},
+		nil,
 	)
 
 	// Create a constant histogram from values we got from a 3rd party telemetry system.
@@ -492,6 +495,7 @@ func ExampleNewConstHistogramWithCreatedTimestamp() {
 		"A histogram of the HTTP request durations.",
 		[]string{"code", "method"},
 		prometheus.Labels{"owner": "example"},
+		nil,
 	)
 
 	createdTs := time.Unix(1719670764, 123)
@@ -520,6 +524,7 @@ func ExampleNewConstHistogram_withExemplar() {
 		"A histogram of the HTTP request durations.",
 		[]string{"code", "method"},
 		prometheus.Labels{"owner": "example"},
+		nil,
 	)
 
 	// Create a constant histogram from values we got from a 3rd party telemetry system.
@@ -689,6 +694,7 @@ func ExampleNewMetricWithTimestamp() {
 		"temperature_kelvin",
 		"Current temperature in Kelvin.",
 		nil, nil,
+		nil,
 	)
 
 	// Create a constant gauge from values we got from an external
@@ -722,6 +728,7 @@ func ExampleNewConstMetricWithCreatedTimestamp() {
 		"time_since_epoch_seconds",
 		"Current epoch time in seconds.",
 		nil, nil,
+		nil,
 	)
 
 	timeSinceEpochReportedByExternalSystem := time.Date(2009, time.November, 10, 23, 0, 0, 12345678, time.UTC)
@@ -744,6 +751,7 @@ func ExampleCollectorFunc() {
 		"http_requests_info",
 		"Information about the received HTTP requests.",
 		[]string{"code", "method"},
+		nil,
 		nil,
 	)
 

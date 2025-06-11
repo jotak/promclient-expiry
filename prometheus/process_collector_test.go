@@ -174,15 +174,15 @@ func TestNewPidFileFn(t *testing.T) {
 func TestDescribeAndCollectAlignment(t *testing.T) {
 	collector := &processCollector{
 		pidFn:     getPIDFn(),
-		cpuTotal:  NewDesc("cpu_total", "Total CPU usage", nil, nil),
-		openFDs:   NewDesc("open_fds", "Number of open file descriptors", nil, nil),
-		maxFDs:    NewDesc("max_fds", "Maximum file descriptors", nil, nil),
-		vsize:     NewDesc("vsize", "Virtual memory size", nil, nil),
-		maxVsize:  NewDesc("max_vsize", "Maximum virtual memory size", nil, nil),
-		rss:       NewDesc("rss", "Resident Set Size", nil, nil),
-		startTime: NewDesc("start_time", "Process start time", nil, nil),
-		inBytes:   NewDesc("in_bytes", "Input bytes", nil, nil),
-		outBytes:  NewDesc("out_bytes", "Output bytes", nil, nil),
+		cpuTotal:  NewDesc("cpu_total", "Total CPU usage", nil, nil, nil),
+		openFDs:   NewDesc("open_fds", "Number of open file descriptors", nil, nil, nil),
+		maxFDs:    NewDesc("max_fds", "Maximum file descriptors", nil, nil, nil),
+		vsize:     NewDesc("vsize", "Virtual memory size", nil, nil, nil),
+		maxVsize:  NewDesc("max_vsize", "Maximum virtual memory size", nil, nil, nil),
+		rss:       NewDesc("rss", "Resident Set Size", nil, nil, nil),
+		startTime: NewDesc("start_time", "Process start time", nil, nil, nil),
+		inBytes:   NewDesc("in_bytes", "Input bytes", nil, nil, nil),
+		outBytes:  NewDesc("out_bytes", "Output bytes", nil, nil, nil),
 	}
 
 	// Collect and get descriptors

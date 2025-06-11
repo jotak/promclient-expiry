@@ -23,6 +23,7 @@ func TestNewDescInvalidLabelValues(t *testing.T) {
 		"sample label",
 		nil,
 		Labels{"a": "\xFF"},
+		nil,
 	)
 	if desc.err == nil {
 		t.Errorf("NewDesc: expected error because: %s", desc.err)
@@ -33,6 +34,7 @@ func TestNewDescNilLabelValues(t *testing.T) {
 	desc := NewDesc(
 		"sample_label",
 		"sample label",
+		nil,
 		nil,
 		nil,
 	)
@@ -47,8 +49,9 @@ func TestNewDescWithNilLabelValues_String(t *testing.T) {
 		"sample label",
 		nil,
 		nil,
+		nil,
 	)
-	if desc.String() != `Desc{fqName: "sample_label", help: "sample label", constLabels: {}, variableLabels: {}}` {
+	if desc.String() != `Desc{fqName: "sample_label", help: "sample label", constLabels: {}, variableLabels: {}, expiry: {disabled}}` {
 		t.Errorf("String: unexpected output: %s", desc.String())
 	}
 }
@@ -57,7 +60,7 @@ func TestNewInvalidDesc_String(t *testing.T) {
 	desc := NewInvalidDesc(
 		nil,
 	)
-	if desc.String() != `Desc{fqName: "", help: "", constLabels: {}, variableLabels: {}}` {
+	if desc.String() != `Desc{fqName: "", help: "", constLabels: {}, variableLabels: {}, expiry: {disabled}}` {
 		t.Errorf("String: unexpected output: %s", desc.String())
 	}
 }

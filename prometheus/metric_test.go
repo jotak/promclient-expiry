@@ -49,7 +49,7 @@ func TestWithExemplarsMetric(t *testing.T) {
 	t.Run("histogram", func(t *testing.T) {
 		// Create a constant histogram from values we got from a 3rd party telemetry system.
 		h := MustNewConstHistogram(
-			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil),
+			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil, nil),
 			4711, 403.34,
 			// Four buckets, but we expect five as the +Inf bucket will be created if we see value outside of those buckets.
 			map[float64]uint64{25: 121, 50: 2403, 100: 3221, 200: 4233},
@@ -99,7 +99,7 @@ func TestWithExemplarsNativeHistogramMetric(t *testing.T) {
 	t.Run("native histogram single exemplar", func(t *testing.T) {
 		// Create a constant histogram from values we got from a 3rd party telemetry system.
 		h := MustNewConstNativeHistogram(
-			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil),
+			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil, nil),
 			10, 12.1, map[int]int64{1: 7, 2: 1, 3: 2}, map[int]int64{}, 0, 2, 0.2, time.Date(
 				2009, 11, 17, 20, 34, 58, 651387237, time.UTC))
 		m := &withExemplarsMetric{Metric: h, exemplars: []*dto.Exemplar{
@@ -122,7 +122,7 @@ func TestWithExemplarsNativeHistogramMetric(t *testing.T) {
 	t.Run("native histogram multiple exemplar", func(t *testing.T) {
 		// Create a constant histogram from values we got from a 3rd party telemetry system.
 		h := MustNewConstNativeHistogram(
-			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil),
+			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil, nil),
 			10, 12.1, map[int]int64{1: 7, 2: 1, 3: 2}, map[int]int64{}, 0, 2, 0.2, time.Date(
 				2009, 11, 17, 20, 34, 58, 651387237, time.UTC))
 		m := &withExemplarsMetric{Metric: h, exemplars: []*dto.Exemplar{
@@ -146,7 +146,7 @@ func TestWithExemplarsNativeHistogramMetric(t *testing.T) {
 	t.Run("native histogram exemplar without timestamp", func(t *testing.T) {
 		// Create a constant histogram from values we got from a 3rd party telemetry system.
 		h := MustNewConstNativeHistogram(
-			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil),
+			NewDesc("http_request_duration_seconds", "A histogram of the HTTP request durations.", nil, nil, nil),
 			10, 12.1, map[int]int64{1: 7, 2: 1, 3: 2}, map[int]int64{}, 0, 2, 0.2, time.Date(
 				2009, 11, 17, 20, 34, 58, 651387237, time.UTC))
 		m := MustNewMetricWithExemplars(h, Exemplar{
@@ -268,7 +268,7 @@ func TestWithExemplarsNativeHistogramMetric(t *testing.T) {
 		}
 
 		for _, tc := range tcs {
-			m, err := newNativeHistogramWithClassicBuckets(NewDesc(tc.Name, "None", []string{}, map[string]string{}), tc.Count, tc.Sum, tc.PositiveBuckets, tc.NegativeBuckets, tc.ZeroBucket, tc.NativeHistogramSchema, tc.NativeHistogramZeroThreshold, tc.CreatedTimestamp, tc.Bucket)
+			m, err := newNativeHistogramWithClassicBuckets(NewDesc(tc.Name, "None", []string{}, map[string]string{}, nil), tc.Count, tc.Sum, tc.PositiveBuckets, tc.NegativeBuckets, tc.ZeroBucket, tc.NativeHistogramSchema, tc.NativeHistogramZeroThreshold, tc.CreatedTimestamp, tc.Bucket)
 			if err != nil {
 				t.Fail()
 			}

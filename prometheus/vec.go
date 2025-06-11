@@ -14,6 +14,7 @@
 package prometheus
 
 import (
+	"container/list"
 	"fmt"
 	"sync"
 
@@ -302,8 +303,15 @@ func (m *MetricVec) hashLabels(labels Labels) (uint64, error) {
 // metricWithLabelValues provides the metric and its label values for
 // disambiguation on hash collision.
 type metricWithLabelValues struct {
-	values []string
-	metric Metric
+	values    []string
+	metric    Metric
+	expirePtr *list.Element
+}
+
+func (m *metricWithLabelValues) onUpdate() {
+	if m.metric.Desc().expiry != nil && m.expirePtr != nil {
+		m.metric.Desc().expiry.tick(m.expirePtr)
+	}
 }
 
 // curriedLabelValue sets the curried value for a label at the given index.
@@ -502,7 +510,13 @@ func (m *metricMap) getOrCreateMetricWithLabelValues(
 	if !ok {
 		inlinedLVs := inlineLabelValues(lvs, curry)
 		metric = m.newMetric(inlinedLVs...)
-		m.metrics[hash] = append(m.metrics[hash], metricWithLabelValues{values: inlinedLVs, metric: metric})
+		var expElt *list.Element
+		if metric.Desc().expiry != nil {
+			expElt = metric.Desc().expiry.add(func() {
+				m.deleteByHashWithLabelValues(hash, lvs, curry)
+			})
+		}
+		m.metrics[hash] = append(m.metrics[hash], metricWithLabelValues{values: inlinedLVs, metric: metric, expirePtr: expElt})
 	}
 	return metric
 }
@@ -527,7 +541,13 @@ func (m *metricMap) getOrCreateMetricWithLabels(
 	if !ok {
 		lvs := extractLabelValues(m.desc, labels, curry)
 		metric = m.newMetric(lvs...)
-		m.metrics[hash] = append(m.metrics[hash], metricWithLabelValues{values: lvs, metric: metric})
+		var expElt *list.Element
+		if metric.Desc().expiry != nil {
+			expElt = metric.Desc().expiry.add(func() {
+				m.deleteByHashWithLabelValues(hash, lvs, curry)
+			})
+		}
+		m.metrics[hash] = append(m.metrics[hash], metricWithLabelValues{values: lvs, metric: metric, expirePtr: expElt})
 	}
 	return metric
 }
@@ -540,6 +560,7 @@ func (m *metricMap) getMetricWithHashAndLabelValues(
 	metrics, ok := m.metrics[h]
 	if ok {
 		if i := findMetricWithLabelValues(metrics, lvs, curry); i < len(metrics) {
+			metrics[i].onUpdate()
 			return metrics[i].metric, true
 		}
 	}
@@ -554,6 +575,7 @@ func (m *metricMap) getMetricWithHashAndLabels(
 	metrics, ok := m.metrics[h]
 	if ok {
 		if i := findMetricWithLabels(m.desc, metrics, labels, curry); i < len(metrics) {
+			metrics[i].onUpdate()
 			return metrics[i].metric, true
 		}
 	}

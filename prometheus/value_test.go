@@ -45,7 +45,7 @@ func TestNewConstMetricInvalidLabelValues(t *testing.T) {
 			"sample_value",
 			"sample value",
 			[]string{"a"},
-			Labels{},
+			Labels{}, nil,
 		)
 
 		expectPanic(t, func() {
@@ -87,6 +87,7 @@ func TestNewConstMetricWithCreatedTimestamp(t *testing.T) {
 			metricDesc := NewDesc(
 				"sample_value",
 				"sample value",
+				nil,
 				nil,
 				nil,
 			)

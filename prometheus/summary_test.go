@@ -478,6 +478,7 @@ func TestNewConstSummaryWithCreatedTimestamp(t *testing.T) {
 		"sample value",
 		nil,
 		nil,
+		nil,
 	)
 	quantiles := map[float64]float64{50: 200.12, 99: 500.342}
 	createdTs := time.Unix(1719670764, 123)
